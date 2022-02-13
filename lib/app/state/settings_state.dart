@@ -96,11 +96,9 @@ class SettingsState extends State<SettingsPage> {
             child: CupertinoPicker(
               itemExtent: 30,
               onSelectedItemChanged: (index) {
-                if (index > 0) {
-                  setState(() {
-                    path = options[index];
-                  });
-                }
+                setState(() {
+                  path = options[index];
+                });
               },
               backgroundColor: CupertinoColors.systemBackground,
               children: [
