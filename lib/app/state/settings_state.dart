@@ -63,13 +63,11 @@ class SettingsState extends State<SettingsPage> {
               itemExtent: 30,
               onSelectedItemChanged: (index) {
                 setState(() {
-                  path = data[section][index - 1];
+                  path = data[section][index];
                 });
               },
               backgroundColor: CupertinoColors.systemBackground,
               children: [
-                const Text("Seleziona un orario",
-                    style: TextStyle(fontSize: 20)),
                 for (var item in data[section])
                   Text(item, style: const TextStyle(fontSize: 20)),
               ],
