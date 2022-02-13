@@ -30,6 +30,7 @@ class ArchimedeApp extends StatelessWidget {
           primaryColor: getTextColor(),
           textStyle: const TextStyle(
             fontFamilyFallback: ['Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+            fontFamily: 'Helvetica Neue',
           ),
         ),
       ),
