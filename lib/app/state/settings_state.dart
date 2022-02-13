@@ -185,6 +185,7 @@ class SettingsState extends State<SettingsPage> {
             ? classFilter()
             : const Padding(padding: EdgeInsets.all(35)),
       ),
+      const Padding(padding: EdgeInsets.all(10)),
       GestureDetector(
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text(path == '' ? "Tap per selezionare" : path,
