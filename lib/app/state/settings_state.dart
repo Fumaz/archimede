@@ -131,7 +131,7 @@ class SettingsState extends State<SettingsPage> {
 
   Widget classFilter() {
     return Column(children: [
-      const Text("Filtra per anno"),
+      Text("Filtra per anno", style: TextStyle(fontSize: 25, color: getTextColor())),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
