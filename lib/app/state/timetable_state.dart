@@ -6,7 +6,6 @@ import 'package:archimede/app/page/timetable_page.dart';
 import 'package:archimede/app/settings.dart' as settings;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../page/settings_page.dart';
 
 class TimetableState extends State<TimetablePage> {
