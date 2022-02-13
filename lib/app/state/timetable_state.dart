@@ -259,7 +259,7 @@ class TimetableState extends State<TimetablePage> {
       context: context,
       builder: (context) => CupertinoAlertDialog(
         title: Text("About Me"),
-        content: Text("Made with <3 by Fumaz\nv$version"),
+        content: Text("Made with <3 by Alessandro Fumagalli\nYou are running v$version"),
         actions: [
           CupertinoDialogAction(
             child: Text("Thanks!"),
