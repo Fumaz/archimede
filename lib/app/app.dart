@@ -28,9 +28,13 @@ class ArchimedeApp extends StatelessWidget {
         primaryColor: CupertinoColors.systemPink,
         textTheme: CupertinoTextThemeData(
           primaryColor: getTextColor(),
+          textStyle: const TextStyle(
+            fontFamilyFallback: ['Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+          ),
         ),
       ),
       home: getPage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 

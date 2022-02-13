@@ -26,3 +26,8 @@ RUN mkdir /usr/src/app/
 COPY . /usr/src/app/
 WORKDIR /usr/src/app/
 RUN flutter build web
+
+# make server startup script executable and start the web server
+RUN ["chmod", "+x", "/usr/src/app/server/server.sh"]
+
+ENTRYPOINT ["/usr/src/app/server/server.sh"]

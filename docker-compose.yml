@@ -12,9 +12,5 @@ services:
     image: fumaz/ubuntu-20.04
     build: .
     restart: unless-stopped
-    working_dir: /usr/src/app
-    volumes:
-      - ./:/usr/src/app
-    command: /usr/src/app/server/server.sh
     networks:
       - nginx_net

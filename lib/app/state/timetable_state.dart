@@ -177,7 +177,7 @@ class TimetableState extends State<TimetablePage> {
     );
   }
 
-  Widget createSliverList() {
+  Widget createSliverList(int selectedDay) {
     if (data.isEmpty) {
       return const SliverFillRemaining(
         child: Center(
@@ -186,7 +186,7 @@ class TimetableState extends State<TimetablePage> {
       );
     }
 
-    Map<String, dynamic> lessons = data[schoolDays[_selectedDayIndex]];
+    Map<String, dynamic> lessons = data[schoolDays[selectedDay]];
 
     return SliverList(
       delegate: SliverChildListDelegate(
@@ -218,10 +218,31 @@ class TimetableState extends State<TimetablePage> {
     );
   }
 
+  Widget buildPageView(BuildContext context) {
+    PageController controller = PageController(
+      initialPage: _selectedDayIndex,
+    );
+
+    return PageView.builder(
+      controller: controller,
+      itemCount: schoolDays.length,
+      itemBuilder: (context, index) {
+        return CustomScrollView(
+            slivers: [createSliverList(index)]
+        );
+      },
+      onPageChanged: (index) {
+        setState(() {
+          _selectedDayIndex = index;
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      child: CustomScrollView(slivers: [
+      child: NestedScrollView(headerSliverBuilder: (context, __) => [
         CupertinoSliverNavigationBar(
           leading: GestureDetector(
             child: const Icon(
@@ -247,9 +268,9 @@ class TimetableState extends State<TimetablePage> {
               for (int i = 0; i < days.length; i++) createDayButton(i)
             ],
           ),
-        ),
-        createSliverList()
-      ]),
+        ),],
+        body: buildPageView(context)
+      ),
     );
   }
 }

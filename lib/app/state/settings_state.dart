@@ -68,7 +68,7 @@ class SettingsState extends State<SettingsPage> {
               },
               backgroundColor: CupertinoColors.systemBackground,
               children: [
-                const Text("Seleziona orario", style: TextStyle(fontSize: 20)),
+                const Text("Seleziona un orario", style: TextStyle(fontSize: 20)),
                 for (var item in data[section])
                   Text(item, style: const TextStyle(fontSize: 20)),
               ],
@@ -126,9 +126,9 @@ class SettingsState extends State<SettingsPage> {
       const Padding(padding: EdgeInsets.all(25)),
       GestureDetector(
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Text(path == '' ? "Seleziona orario" : path,
+          Text(path == '' ? "Tap per selezionare" : path,
               style: TextStyle(fontSize: 25, color: getTextColor())),
-          Icon(CupertinoIcons.down_arrow, size: 25, color: getTextColor()),
+          Icon(CupertinoIcons.chevron_down, size: 25, color: getTextColor()),
         ]),
         onTap: () {
           showPathDialog();
