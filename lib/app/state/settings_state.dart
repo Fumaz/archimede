@@ -68,11 +68,34 @@ class SettingsState extends State<SettingsPage> {
               },
               backgroundColor: CupertinoColors.systemBackground,
               children: [
-                const Text("Seleziona un orario", style: TextStyle(fontSize: 20)),
+                const Text("Seleziona un orario",
+                    style: TextStyle(fontSize: 20)),
                 for (var item in data[section])
                   Text(item, style: const TextStyle(fontSize: 20)),
               ],
             )));
+  }
+
+  Widget sectionSelector(String code, String name, IconData icon, Color color) {
+    return GestureDetector(
+        child: Container(
+          padding: const EdgeInsets.all(10.0),
+          decoration: BoxDecoration(
+              border: Border.all(
+                  width: 2.0,
+                  color: color.withAlpha(section == code ? 255 : 0)),
+              borderRadius: BorderRadius.circular(20.0)),
+          child: Column(
+            children: [
+              Icon(icon, size: 100, color: color),
+              Text(name, style: TextStyle(fontSize: 25, color: color)),
+              getTick(section == code, color),
+            ],
+          ),
+        ),
+        onTap: () {
+          setSection(code);
+        });
   }
 
   Widget createPage() {
@@ -90,37 +113,11 @@ class SettingsState extends State<SettingsPage> {
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          GestureDetector(
-            child: Column(
-              children: [
-                const Icon(CupertinoIcons.person_solid,
-                    size: 100, color: CupertinoColors.systemYellow),
-                const Text('Alunno',
-                    style: TextStyle(
-                        fontSize: 25, color: CupertinoColors.systemYellow)),
-                getTick(section == 'CLASSI', CupertinoColors.systemYellow),
-              ],
-            ),
-            onTap: () {
-              setSection('CLASSI');
-            },
-          ),
-          const Padding(padding: const EdgeInsets.all(50)),
-          GestureDetector(
-            child: Column(
-              children: [
-                const Icon(CupertinoIcons.briefcase_fill,
-                    size: 100, color: CupertinoColors.activeBlue),
-                const Text('Docente',
-                    style: TextStyle(
-                        fontSize: 25, color: CupertinoColors.activeBlue)),
-                getTick(section == 'DOCENTI', CupertinoColors.activeBlue),
-              ],
-            ),
-            onTap: () {
-              setSection('DOCENTI');
-            },
-          ),
+          sectionSelector('CLASSI', 'Alunno', CupertinoIcons.person_solid,
+              CupertinoColors.systemYellow),
+          const Padding(padding: EdgeInsets.all(50)),
+          sectionSelector('DOCENTI', 'Docente', CupertinoIcons.briefcase_fill,
+              CupertinoColors.activeBlue),
         ],
       ),
       const Padding(padding: EdgeInsets.all(25)),
