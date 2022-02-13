@@ -129,6 +129,9 @@ class TimetableState extends State<TimetablePage> {
     HSLColor color = HSLColor.fromAHSL(1, random.nextDouble() * 360, 1, 0.75);
 
     String actualRoom = getRoomFromLesson(lesson);
+    String actualClass = lesson?['class'] ?? lesson?['subject'] ?? "No subject";
+    String actualSubject = (actualClass != lesson?['subject']) ? (lesson?['subject'] ?? "No class") : (lesson?['class'] ?? "No class");
+
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -142,12 +145,12 @@ class TimetableState extends State<TimetablePage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(lesson?['class'] ?? "No class",
+                Text(actualClass,
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     )),
-                Text(lesson?['subject'] ?? "No subject",
+                Text(actualSubject,
                     style: const TextStyle(
                       fontSize: 15,
                     )),
