@@ -6,5 +6,6 @@
         align-items: center; /* Cross Axis */
       }
       .indicator{
-        width: 3vw;
+        width: 2vw;
+        height: 2vw;
       }

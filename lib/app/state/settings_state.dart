@@ -40,6 +40,19 @@ class SettingsState extends State<SettingsPage> {
 
   void confirm(BuildContext context) async {
     if (section == "" || path == "") {
+      showCupertinoDialog(context: context, builder: (context) {
+        return CupertinoAlertDialog(
+          title: const Text("Devi prima selezionare l'orario!"),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      });
       return;
     }
 
@@ -52,13 +65,26 @@ class SettingsState extends State<SettingsPage> {
 
   void showPathDialog() {
     if (section == "") {
+      showCupertinoDialog(context: context, builder: (context) {
+        return CupertinoAlertDialog(
+          title: const Text("Devi prima selezionare la categoria!"),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      });
       return;
     }
 
     showCupertinoModalPopup(
         context: context,
         builder: (_) => SizedBox(
-            height: 200,
+            height: 350,
             child: CupertinoPicker(
               itemExtent: 30,
               onSelectedItemChanged: (index) {
@@ -69,7 +95,7 @@ class SettingsState extends State<SettingsPage> {
               backgroundColor: CupertinoColors.systemBackground,
               children: [
                 for (var item in data[section])
-                  Text(item, style: const TextStyle(fontSize: 20)),
+                  Text(item, style: const TextStyle(fontSize: 25)),
               ],
             )));
   }
