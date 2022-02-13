@@ -6,6 +6,7 @@ import 'package:archimede/app/page/timetable_page.dart';
 import 'package:archimede/app/settings.dart' as settings;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import '../page/settings_page.dart';
 
 class TimetableState extends State<TimetablePage> {
@@ -16,6 +17,10 @@ class TimetableState extends State<TimetablePage> {
   String section = "";
   String path = "";
   Map<String, dynamic> data = {};
+
+  PageController controller = PageController(
+    initialPage: 0,
+  );
 
   void loadData() async {
     section = settings.get("section");
@@ -45,7 +50,12 @@ class TimetableState extends State<TimetablePage> {
     bool selected = index == _selectedDayIndex;
 
     return GestureDetector(
-      onTap: () => setState(() => _selectedDayIndex = index),
+      onTap: () => setState(() {
+        _selectedDayIndex = index;
+        controller.animateToPage(_selectedDayIndex,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut);
+      }),
       child: Container(
         padding:
             EdgeInsets.only(top: 0, bottom: 0, right: 20, left: first ? 0 : 20),
@@ -129,13 +139,63 @@ class TimetableState extends State<TimetablePage> {
 
     String actualRoom = getRoomFromLesson(lesson);
     String actualClass = lesson?['class'] ?? lesson?['subject'] ?? "No subject";
-    String actualSubject = (actualClass != lesson?['subject']) ? (lesson?['subject'] ?? "No class") : (lesson?['class'] ?? "No class");
+    String actualSubject = (actualClass != lesson?['subject'])
+        ? (lesson?['subject'] ?? "No class")
+        : (lesson?['class'] ?? "No class");
 
+    return Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        color: color.toColor(),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(actualClass,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  Text(actualSubject,
+                      style: const TextStyle(
+                        fontSize: 15,
+                      )),
+                  for (String teacher in lesson?['teachers'] ?? [])
+                    Text(teacher,
+                        style: const TextStyle(
+                          fontSize: 15,
+                        )),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(time,
+                      style: const TextStyle(
+                        fontSize: 17,
+                      )),
+                  Text(actualRoom,
+                      style: const TextStyle(
+                        fontSize: 17,
+                      )),
+                ],
+              ),
+            ],
+          ),
+        ));
+  }
+
+  Widget createFreeCard() {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
-      color: color.toColor(),
+      color: Colors.red,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
         child: Row(
@@ -144,30 +204,17 @@ class TimetableState extends State<TimetablePage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(actualClass,
+                Text("Nothing's happening today!",
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     )),
-                Text(actualSubject,
-                    style: const TextStyle(
-                      fontSize: 15,
-                    )),
-                for (String teacher in lesson?['teachers'] ?? [])
-                  Text(teacher,
-                      style: const TextStyle(
-                        fontSize: 15,
-                      )),
               ],
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(time,
-                    style: const TextStyle(
-                      fontSize: 17,
-                    )),
-                Text(actualRoom,
+                Text("All Day",
                     style: const TextStyle(
                       fontSize: 17,
                     )),
@@ -175,7 +222,7 @@ class TimetableState extends State<TimetablePage> {
             ),
           ],
         ),
-      )
+      ),
     );
   }
 
@@ -189,18 +236,21 @@ class TimetableState extends State<TimetablePage> {
     }
 
     Map<String, dynamic> lessons = data[schoolDays[selectedDay]];
+    List<Widget> cards = [
+      for (String time in lessons.keys)
+        if (lessons[time] != null)
+          if (section == "DOCENTI")
+            createCardTeacher(time, lessons[time])
+          else
+            createCardClass(time, lessons[time], 1)
+    ];
+
+    if (cards.isEmpty) {
+      cards.add(createFreeCard());
+    }
 
     return SliverList(
-      delegate: SliverChildListDelegate(
-        [
-          for (String time in lessons.keys)
-            if (lessons[time] != null)
-              if (section == "DOCENTI")
-                createCardTeacher(time, lessons[time])
-              else
-                createCardClass(time, lessons[time], 1)
-        ],
-      ),
+      delegate: SliverChildListDelegate(cards),
     );
   }
 
@@ -221,17 +271,11 @@ class TimetableState extends State<TimetablePage> {
   }
 
   Widget buildPageView(BuildContext context) {
-    PageController controller = PageController(
-      initialPage: _selectedDayIndex,
-    );
-
     return PageView.builder(
       controller: controller,
       itemCount: schoolDays.length,
       itemBuilder: (context, index) {
-        return CustomScrollView(
-            slivers: [createSliverList(index)]
-        );
+        return CustomScrollView(slivers: [createSliverList(index)]);
       },
       onPageChanged: (index) {
         setState(() {
@@ -244,35 +288,39 @@ class TimetableState extends State<TimetablePage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      child: NestedScrollView(headerSliverBuilder: (context, __) => [
-        CupertinoSliverNavigationBar(
-          leading: GestureDetector(
-            child: const Icon(
-              CupertinoIcons.gear,
-              size: 25,
-            ),
-            onTap: () {
-              Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context) => const SettingsPage()));
-            },
-          ),
-          trailing: GestureDetector(
-            child: const Icon(
-              CupertinoIcons.info,
-              size: 25,
-            ),
-            onTap: () {
-              showAuthor();
-            },
-          ),
-          largeTitle: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              for (int i = 0; i < days.length; i++) createDayButton(i)
-            ],
-          ),
-        ),],
-        body: buildPageView(context)
-      ),
+      child: NestedScrollView(
+          headerSliverBuilder: (context, __) => [
+                CupertinoSliverNavigationBar(
+                  leading: GestureDetector(
+                    child: const Icon(
+                      CupertinoIcons.gear,
+                      size: 25,
+                    ),
+                    onTap: () {
+                      Navigator.pushReplacement(
+                          context,
+                          CupertinoPageRoute(
+                              builder: (context) => const SettingsPage()));
+                    },
+                  ),
+                  trailing: GestureDetector(
+                    child: const Icon(
+                      CupertinoIcons.info,
+                      size: 25,
+                    ),
+                    onTap: () {
+                      showAuthor();
+                    },
+                  ),
+                  largeTitle: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (int i = 0; i < days.length; i++) createDayButton(i)
+                    ],
+                  ),
+                ),
+              ],
+          body: buildPageView(context)),
     );
   }
 }
