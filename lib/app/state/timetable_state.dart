@@ -18,6 +18,10 @@ class TimetableState extends State<TimetablePage> {
   String path = "";
   Map<String, dynamic> data = {};
 
+  PageController controller = PageController(
+    initialPage: 0,
+  );
+
   void loadData() async {
     section = settings.get("section");
     path = settings.get("path");
@@ -30,7 +34,9 @@ class TimetableState extends State<TimetablePage> {
   initState() {
     super.initState();
 
-    int weekday = DateTime.now().weekday;
+    int weekday = DateTime
+        .now()
+        .weekday;
 
     if (weekday > days.length) {
       _selectedDayIndex = 0;
@@ -46,15 +52,16 @@ class TimetableState extends State<TimetablePage> {
     bool selected = index == _selectedDayIndex;
 
     return GestureDetector(
-      onTap: () => setState(() {
-        _selectedDayIndex = index;
-        controller.animateToPage(_selectedDayIndex,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut);
-      }),
+      onTap: () =>
+          setState(() {
+            _selectedDayIndex = index;
+            controller.animateToPage(_selectedDayIndex,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut);
+          }),
       child: Container(
         padding:
-            EdgeInsets.only(top: 0, bottom: 0, right: 20, left: first ? 0 : 20),
+        EdgeInsets.only(top: 0, bottom: 0, right: 20, left: first ? 0 : 20),
         child: Text(days[index],
             style: TextStyle(
               color: selected ? CupertinoColors.systemPink : getTextColor(),
@@ -253,35 +260,37 @@ class TimetableState extends State<TimetablePage> {
   void showAuthor() {
     showCupertinoDialog(
       context: context,
-      builder: (context) => CupertinoAlertDialog(
-        title: Text("About Me"),
-        content: Text("Made with <3 by Alessandro Fumagalli\nYou are running v$version"),
-        actions: [
-          CupertinoDialogAction(
-            child: Text("Thanks!"),
-            onPressed: () => Navigator.pop(context),
+      builder: (context) =>
+          CupertinoAlertDialog(
+            title: Text("About Me"),
+            content: Text(
+                "Made with <3 by Alessandro Fumagalli\nYou are running v$version"),
+            actions: [
+              CupertinoDialogAction(
+                child: Text("Thanks!"),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
   Widget buildPageView(BuildContext context) {
-    PageController controller = PageController(
-      initialPage: _selectedDayIndex,
-    );
+    controller.animateToPage(
+        _selectedDayIndex, duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut);
 
     return PageView.builder(
-      controller: controller,
-      itemCount: schoolDays.length,
-      itemBuilder: (context, index) {
-        return CustomScrollView(slivers: [createSliverList(index)]);
-      },
-      onPageChanged: (index) {
-        setState(() {
-          _selectedDayIndex = index;
-        });
-      },
+    controller: controller,
+    itemCount: schoolDays.length,
+    itemBuilder: (context, index) {
+    return CustomScrollView(slivers: [createSliverList(index)]);
+    },
+    onPageChanged: (index) {
+    setState(() {
+    _selectedDayIndex = index;
+    });
+    },
     );
   }
 
@@ -289,37 +298,38 @@ class TimetableState extends State<TimetablePage> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       child: NestedScrollView(
-          headerSliverBuilder: (context, __) => [
-                CupertinoSliverNavigationBar(
-                  leading: GestureDetector(
-                    child: const Icon(
-                      CupertinoIcons.gear,
-                      size: 25,
-                    ),
-                    onTap: () {
-                      Navigator.pushReplacement(
-                          context,
-                          CupertinoPageRoute(
-                              builder: (context) => const SettingsPage()));
-                    },
-                  ),
-                  trailing: GestureDetector(
-                    child: const Icon(
-                      CupertinoIcons.info,
-                      size: 25,
-                    ),
-                    onTap: () {
-                      showAuthor();
-                    },
-                  ),
-                  largeTitle: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      for (int i = 0; i < days.length; i++) createDayButton(i)
-                    ],
-                  ),
+          headerSliverBuilder: (context, __) =>
+          [
+            CupertinoSliverNavigationBar(
+              leading: GestureDetector(
+                child: const Icon(
+                  CupertinoIcons.gear,
+                  size: 25,
                 ),
-              ],
+                onTap: () {
+                  Navigator.pushReplacement(
+                      context,
+                      CupertinoPageRoute(
+                          builder: (context) => const SettingsPage()));
+                },
+              ),
+              trailing: GestureDetector(
+                child: const Icon(
+                  CupertinoIcons.info,
+                  size: 25,
+                ),
+                onTap: () {
+                  showAuthor();
+                },
+              ),
+              largeTitle: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (int i = 0; i < days.length; i++) createDayButton(i)
+                ],
+              ),
+            ),
+          ],
           body: buildPageView(context)),
     );
   }
