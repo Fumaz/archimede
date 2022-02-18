@@ -18,10 +18,6 @@ class TimetableState extends State<TimetablePage> {
   String path = "";
   Map<String, dynamic> data = {};
 
-  PageController controller = PageController(
-    initialPage: 0,
-  );
-
   void loadData() async {
     section = settings.get("section");
     path = settings.get("path");
@@ -271,6 +267,10 @@ class TimetableState extends State<TimetablePage> {
   }
 
   Widget buildPageView(BuildContext context) {
+    PageController controller = PageController(
+      initialPage: _selectedDayIndex,
+    );
+
     return PageView.builder(
       controller: controller,
       itemCount: schoolDays.length,
