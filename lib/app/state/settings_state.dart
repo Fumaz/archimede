@@ -93,18 +93,23 @@ class SettingsState extends State<SettingsPage> {
         context: context,
         builder: (_) => SizedBox(
             height: 350,
-            child: CupertinoPicker(
-              itemExtent: 30,
-              onSelectedItemChanged: (index) {
-                setState(() {
-                  path = options[index];
-                });
+            child: GestureDetector(
+              onTapUp: (details) {
+                Navigator.pop(context);
               },
-              backgroundColor: CupertinoColors.systemBackground,
-              children: [
-                for (var item in options)
-                  Text(item, style: const TextStyle(fontSize: 25)),
-              ],
+              child: CupertinoPicker(
+                itemExtent: 30,
+                onSelectedItemChanged: (index) {
+                  setState(() {
+                    path = options[index];
+                  });
+                },
+                backgroundColor: CupertinoColors.systemBackground,
+                children: [
+                  for (var item in options)
+                    Text(item, style: const TextStyle(fontSize: 25))
+                ],
+              ),
             )));
   }
 
@@ -180,7 +185,7 @@ class SettingsState extends State<SettingsPage> {
       ),
       const Padding(padding: EdgeInsets.all(25)),
       SizedBox(
-        height: 70,
+        height: 90,
         child: section == 'CLASSI'
             ? classFilter()
             : const Padding(padding: EdgeInsets.all(35)),
