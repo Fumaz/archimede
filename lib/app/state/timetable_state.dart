@@ -7,6 +7,7 @@ import 'package:archimede/app/settings.dart' as settings;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../util/utils.dart';
 import '../page/settings_page.dart';
 
 class TimetableState extends State<TimetablePage> {
@@ -267,7 +268,7 @@ class TimetableState extends State<TimetablePage> {
         continue;
       }
 
-      if (key > first && key < last) {
+      if (key >= first && key <= last) {
         cards.add(createCardAvailable(
             time, selectedDay == DateTime.now().weekday - 1));
       }
@@ -354,6 +355,7 @@ class TimetableState extends State<TimetablePage> {
                       for (int i = 0; i < days.length; i++) createDayButton(i)
                     ],
                   ),
+                  middle: Text(path),
                 ),
               ],
           body: Center(

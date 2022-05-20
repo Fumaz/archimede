@@ -8,5 +8,4 @@ class SettingsPage extends StatefulWidget {
   State<StatefulWidget> createState() {
     return SettingsState();
   }
-
 }

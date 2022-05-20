@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,6 +17,6 @@ Future<bool> set(String key, String value) async {
   return await preferences.setString(key, value);
 }
 
-Future<bool> remove(String key) async{
+Future<bool> remove(String key) async {
   return await preferences.remove(key);
 }

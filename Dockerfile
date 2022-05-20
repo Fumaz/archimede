@@ -25,7 +25,7 @@ RUN flutter config --enable-web
 RUN mkdir /usr/src/app/
 COPY . /usr/src/app/
 WORKDIR /usr/src/app/
-RUN flutter build web --web-renderer html --release
+RUN flutter build web --release
 
 # make server startup script executable and start the web server
 RUN ["chmod", "+x", "/usr/src/app/server/server.sh"]

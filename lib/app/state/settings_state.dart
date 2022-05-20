@@ -5,8 +5,10 @@ import 'package:archimede/app/page/timetable_page.dart';
 import 'package:archimede/app/settings.dart' as settings;
 import 'package:flutter/cupertino.dart';
 
+import '../../util/utils.dart';
+
 class SettingsState extends State<SettingsPage> {
-  Map<String, dynamic> data = {};
+  Map<String, dynamic> summary = {};
 
   String section = "";
   String path = "";
@@ -18,7 +20,7 @@ class SettingsState extends State<SettingsPage> {
 
     get("/summary").then((response) {
       setState(() {
-        data = response;
+        summary = response;
       });
     });
   }
@@ -81,7 +83,7 @@ class SettingsState extends State<SettingsPage> {
       return;
     }
 
-    var options = data[section];
+    var options = summary[section];
     if (section == 'CLASSI' && selectedClass != null) {
       // filter the options by class
       options = options
@@ -162,7 +164,7 @@ class SettingsState extends State<SettingsPage> {
   }
 
   Widget createPage() {
-    if (data.isEmpty) {
+    if (summary.isEmpty) {
       return const CupertinoActivityIndicator();
     }
 
