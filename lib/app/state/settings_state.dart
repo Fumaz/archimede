@@ -165,7 +165,16 @@ class SettingsState extends State<SettingsPage> {
 
   Widget createPage() {
     if (summary.isEmpty) {
-      return const CupertinoActivityIndicator();
+      return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const CupertinoActivityIndicator(),
+              Text("Loading...", style: TextStyle(color: getTextColor()))
+            ],
+          )
+      );
     }
 
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [

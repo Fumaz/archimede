@@ -223,9 +223,18 @@ class TimetableState extends State<TimetablePage> {
 
   Widget createSliverList(int selectedDay) {
     if (data.isEmpty) {
-      return const SliverFillRemaining(
+      return SliverFillRemaining(
+        hasScrollBody: false,
+        fillOverscroll: true,
         child: Center(
-          child: CupertinoActivityIndicator(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: const [
+              CupertinoActivityIndicator(),
+              Text("Loading...")
+            ],
+          ),
         ),
       );
     }
