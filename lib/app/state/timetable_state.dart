@@ -242,19 +242,19 @@ class TimetableState extends State<TimetablePage> {
     Map<String, dynamic> lessons = data[schoolDays[selectedDay]];
     List<Widget> cards = [];
 
-    int first = 0;
-    int last = 0;
+    int first = -1;
+    int last = -1;
 
     for (int key = 0; key < lessons.keys.length; key++) {
       String time = lessons.keys.elementAt(key);
       bool available = lessons[time] != null;
 
       if (available) {
-        if (first == 0 || first > key) {
+        if (first == -1 || first > key) {
           first = key;
         }
 
-        if (last == 0 || last < key) {
+        if (last == -1 || last < key) {
           last = key;
         }
       }
@@ -277,7 +277,7 @@ class TimetableState extends State<TimetablePage> {
         continue;
       }
 
-      if (key >= first && key <= last) {
+      if (key > first && key < last) {
         cards.add(createCardAvailable(
             time, selectedDay == DateTime.now().weekday - 1));
       }
